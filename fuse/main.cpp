@@ -12,7 +12,7 @@ int getattr(const char *path, struct stat *stat, struct fuse_file_info *fi) {
         auto filetype = FOLDER;
         auto permissions = 0777;
         stat->st_mode = filetype | permissions;
-        stat->st_nlink = 1;
+        stat->st_nlink = 2;
         stat->st_uid = 0;
         stat->st_gid = 0;
         stat->st_size = 0;
@@ -108,13 +108,14 @@ int readdir(
 }
 
 
-static const struct fuse_operations fuse_example_operations = {
+static const struct fuse_operations shrine_fuse_operations = {
         .getattr = getattr,
 //        .open = open,
+//        .create = create,
         .read = read,
         .readdir = readdir,
 };
 
 int main(int argc, char *argv[]) {
-    return fuse_main(argc, argv, &fuse_example_operations, nullptr);
+    return fuse_main(argc, argv, &shrine_fuse_operations, nullptr);
 }
