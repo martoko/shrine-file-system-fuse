@@ -1,0 +1,46 @@
+=== Definition ===
+
+Directory
+    type: Enum
+    parent: ULEB128
+    childCount: ULEB128
+    children: Child[childCount]
+
+Child
+    nameLength: ULEB128
+    name: char[nameLength]
+    address: ULEB128
+
+File
+    type: Enum
+    parent: ULEB128
+    size: ULEB128
+    data: uint8[size]
+
+
+=== Example ===
+
+0x00 type: DIRECTORY
+0x01 parent: 1
+0x02 childCount: 3
+0x03 {nameLength: 3, name: "bin", address: 0x21}
+0x08 {nameLength: 4, name: "user", address: 0x16}
+0x0E {nameLength: 6, name: "hi.txt", address: 0x24}
+
+0x16 type: DIRECTORY # /user
+0x17 parent: 0x00
+0x18 childCount: 1
+0x19 {nameLength: 6, name: "cat.png", address: 0x38}
+
+0x21 type: DIRECTORY # /bin
+0x22 parent: 0x00
+0x23 childCount: 0
+
+0x24 type: FILE # /hi.txt
+0x25 parent: 0x00
+0x26 size: 17
+0x27 "Hello world\0\0\0"
+
+0x38 type: FILE # /user/cat.png
+0x39 parent: 0x16
+0x40 size: 0
