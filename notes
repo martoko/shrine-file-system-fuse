@@ -1,46 +1,48 @@
 === Definition ===
 
+# Root
+#     rootDirectoryAdress: Uleb128
+#     emptyEntryCount: Uleb128
+#     emptyEntries: (address: Uleb128, size: Uleb128)[emptyEntryCount]
+
 Directory
-    type: Enum
-    parent: ULEB128
-    childCount: ULEB128
-    children: Child[childCount]
-
-Child
-    nameLength: ULEB128
-    name: char[nameLength]
-    address: ULEB128
-
-File
-    type: Enum
-    parent: ULEB128
-    size: ULEB128
-    data: uint8[size]
+    childCount: Uleb128
+    children: (
+        type: Directory | File,
+        size: Uleb128,
+        nameLength: Uleb128,
+        name: Char[nameLength],
+        address: Uleb128
+        )[childCount]
 
 
 === Example ===
 
+0x?? addressOfRoot: 0x??
+0x?? entryCount: 0x1
+0x?? (address: 0x28, size: 0x68)
+
 0x00 type: DIRECTORY
-0x01 parent: 1
-0x02 childCount: 3
-0x03 {nameLength: 3, name: "bin", address: 0x21}
-0x08 {nameLength: 4, name: "user", address: 0x16}
-0x0E {nameLength: 6, name: "hi.txt", address: 0x24}
+0x01 parent: 0x1
+0x02 childCount: 0x3
+0x03 (nameLength: 0x3, name: "bin", address: 0x21)
+0x08 (nameLength: 0x4, name: "user", address: 0x16)
+0x0E (nameLength: 0x6, name: "hi.txt", address: 0x24)
 
 0x16 type: DIRECTORY # /user
 0x17 parent: 0x00
-0x18 childCount: 1
-0x19 {nameLength: 6, name: "cat.png", address: 0x38}
+0x18 childCount: 0x1
+0x19 (nameLength: 0x6, name: "cat.png", address: 0x90)
 
 0x21 type: DIRECTORY # /bin
 0x22 parent: 0x00
-0x23 childCount: 0
+0x23 childCount: 0x0
 
 0x24 type: FILE # /hi.txt
 0x25 parent: 0x00
-0x26 size: 17
+0x26 size: 0x11
 0x27 "Hello world\0\0\0"
 
-0x38 type: FILE # /user/cat.png
-0x39 parent: 0x16
-0x40 size: 0
+0x90 type: FILE # /user/cat.png
+0x91 parent: 0x16
+0x92 size: 0x0
