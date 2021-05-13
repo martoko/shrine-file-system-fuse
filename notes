@@ -1,10 +1,5 @@
 === Definition ===
 
-# Root
-#     rootDirectoryAdress: Uleb128
-#     emptyEntryCount: Uleb128
-#     emptyEntries: (address: Uleb128, size: Uleb128)[emptyEntryCount]
-
 Directory
     childCount: Uleb128
     children: (
@@ -14,6 +9,17 @@ Directory
         name: Char[nameLength],
         address: Uleb128
         )[childCount]
+
+
+=== Operations ===
+
+Append to an entry: Utilizes any blank space after the entry, or re-allocates the entry with a new address
+Trim an entry: Leaves blank space after the entry
+Add a new entry: Allocates an entry, then appends to the parent directory
+Delete an entry: Trims the parent directory
+
+Allocating:
+TODO: How to find empty space, bitmaps, linked lists?
 
 
 === Example ===
